@@ -26,18 +26,37 @@ type LpgEdge = {
   label: string;
 };
 
-const PRESET_NODES: LpgNode[] = [
+const METFORMIN_NODES: LpgNode[] = [
   { id: 'metformin', label: 'Metformin',         type: 'compound', properties: { launched: '1995', class: 'Biguanide' } },
   { id: 'ampk',      label: 'AMPK',              type: 'target',   properties: { kind: 'Kinase' } },
   { id: 'ins',       label: 'Insulin signalling', type: 'pathway', properties: {} },
   { id: 't2d',       label: 'Type 2 Diabetes',   type: 'disease',  properties: { prevalence: '~10% adults' } },
 ];
 
-const PRESET_EDGES: LpgEdge[] = [
+const METFORMIN_EDGES: LpgEdge[] = [
   { id: 'e1', source: 'metformin', target: 'ampk', label: 'TARGETS' },
   { id: 'e2', source: 'ampk',      target: 'ins',  label: 'PARTICIPATES_IN' },
   { id: 'e3', source: 'ins',       target: 't2d',  label: 'ASSOCIATED_WITH' },
   { id: 'e4', source: 'metformin', target: 't2d',  label: 'TREATS' },
+];
+
+// Lord of the Rings — a cheeky second preset. Types are mapped loosely to
+// the pharma palette so the visual still reads: heroes/allies as orange
+// compounds, artefact as a green document, villain as a red disease.
+const LOTR_NODES: LpgNode[] = [
+  { id: 'frodo',   label: 'Frodo',         type: 'compound', properties: { race: 'Hobbit', age: '50', from: 'Shire' } },
+  { id: 'aragorn', label: 'Aragorn',       type: 'compound', properties: { race: 'Human', age: '87', heirOf: 'Gondor' } },
+  { id: 'gandalf', label: 'Gandalf',       type: 'compound', properties: { race: 'Maia', colour: 'Grey' } },
+  { id: 'sauron',  label: 'Sauron',        type: 'disease',  properties: { role: 'Dark Lord', realm: 'Mordor' } },
+  { id: 'ring',    label: 'The One Ring',  type: 'document', properties: { forgedIn: 'Mount Doom', power: 'Invisibility' } },
+];
+
+const LOTR_EDGES: LpgEdge[] = [
+  { id: 'le1', source: 'frodo',   target: 'ring',    label: 'CARRIES' },
+  { id: 'le2', source: 'sauron',  target: 'ring',    label: 'FORGED' },
+  { id: 'le3', source: 'gandalf', target: 'frodo',   label: 'ADVISES' },
+  { id: 'le4', source: 'aragorn', target: 'frodo',   label: 'PROTECTS' },
+  { id: 'le5', source: 'aragorn', target: 'gandalf', label: 'ALLY_OF' },
 ];
 
 const TYPE_OPTIONS: NodeType[] = [
@@ -96,8 +115,8 @@ function toElements(nodes: LpgNode[], edges: LpgEdge[]): ElementDefinition[] {
 }
 
 export function Slide5bLpgPlayground({ config }: { config: SlideConfig }) {
-  const [nodes, setNodes] = useState<LpgNode[]>(PRESET_NODES);
-  const [edges, setEdges] = useState<LpgEdge[]>(PRESET_EDGES);
+  const [nodes, setNodes] = useState<LpgNode[]>(METFORMIN_NODES);
+  const [edges, setEdges] = useState<LpgEdge[]>(METFORMIN_EDGES);
 
   const [newName, setNewName] = useState('');
   const [newType, setNewType] = useState<NodeType>('compound');
@@ -145,9 +164,9 @@ export function Slide5bLpgPlayground({ config }: { config: SlideConfig }) {
     setNodes([]);
     setEdges([]);
   };
-  const loadPreset = () => {
-    setNodes(PRESET_NODES);
-    setEdges(PRESET_EDGES);
+  const loadPreset = (n: LpgNode[], e: LpgEdge[]) => {
+    setNodes(n);
+    setEdges(e);
   };
 
   return (
@@ -246,14 +265,38 @@ export function Slide5bLpgPlayground({ config }: { config: SlideConfig }) {
             </button>
           </div>
 
+          <div
+            style={{
+              fontSize: 9.5,
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--color-ink-faint)',
+              fontWeight: 600,
+              marginTop: 4,
+            }}
+          >
+            Presets
+          </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button type="button" onClick={loadPreset} style={ghostBtnStyle()}>
-              load preset
+            <button
+              type="button"
+              onClick={() => loadPreset(METFORMIN_NODES, METFORMIN_EDGES)}
+              style={ghostBtnStyle()}
+            >
+              💊 Metformin
             </button>
-            <button type="button" onClick={reset} style={ghostBtnStyle()}>
-              clear
+            <button
+              type="button"
+              onClick={() => loadPreset(LOTR_NODES, LOTR_EDGES)}
+              style={ghostBtnStyle()}
+            >
+              🧙 Middle-earth
             </button>
           </div>
+          <button type="button" onClick={reset} style={{ ...ghostBtnStyle(), flex: 'none' }}>
+            clear all
+          </button>
         </div>
 
         {/* Middle — entity inspector / list */}

@@ -14,13 +14,24 @@ import type { SlideConfig } from './slideConfigs';
 
 type Triple = { id: string; subject: string; predicate: string; object: string };
 
-const PRESET: Triple[] = [
+const METFORMIN_PRESET: Triple[] = [
   { id: 't1', subject: 'Metformin', predicate: 'rdfs:type',      object: 'Drug' },
   { id: 't2', subject: 'Metformin', predicate: 'launched',       object: '1995' },
   { id: 't3', subject: 'Metformin', predicate: 'class',          object: 'Biguanide' },
   { id: 't4', subject: 'Metformin', predicate: 'targets',        object: 'AMPK' },
   { id: 't5', subject: 'AMPK',      predicate: 'participatesIn', object: 'Insulin signalling' },
   { id: 't6', subject: 'Metformin', predicate: 'treats',         object: 'Type 2 Diabetes' },
+];
+
+const LOTR_PRESET: Triple[] = [
+  { id: 'l1', subject: 'Frodo',   predicate: 'race',     object: 'Hobbit' },
+  { id: 'l2', subject: 'Frodo',   predicate: 'from',     object: 'Shire' },
+  { id: 'l3', subject: 'Frodo',   predicate: 'carries',  object: 'The One Ring' },
+  { id: 'l4', subject: 'Sauron',  predicate: 'forged',   object: 'The One Ring' },
+  { id: 'l5', subject: 'Sauron',  predicate: 'rules',    object: 'Mordor' },
+  { id: 'l6', subject: 'Gandalf', predicate: 'advises',  object: 'Frodo' },
+  { id: 'l7', subject: 'Aragorn', predicate: 'protects', object: 'Frodo' },
+  { id: 'l8', subject: 'Aragorn', predicate: 'heirOf',   object: 'Gondor' },
 ];
 
 function slug(s: string): string {
@@ -56,7 +67,7 @@ function triplesToElements(triples: Triple[]): ElementDefinition[] {
 }
 
 export function Slide5aRdfPlayground({ config }: { config: SlideConfig }) {
-  const [triples, setTriples] = useState<Triple[]>(PRESET);
+  const [triples, setTriples] = useState<Triple[]>(METFORMIN_PRESET);
   const [subject, setSubject] = useState('');
   const [predicate, setPredicate] = useState('');
   const [object, setObject] = useState('');
@@ -76,7 +87,7 @@ export function Slide5aRdfPlayground({ config }: { config: SlideConfig }) {
 
   const remove = (id: string) => setTriples((prev) => prev.filter((t) => t.id !== id));
   const reset = () => setTriples([]);
-  const loadPreset = () => setTriples(PRESET);
+  const loadPreset = (preset: Triple[]) => setTriples(preset);
 
   return (
     <div className="slide-safe" style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -136,14 +147,30 @@ export function Slide5aRdfPlayground({ config }: { config: SlideConfig }) {
             + add triple
           </button>
 
-          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-            <button type="button" onClick={loadPreset} style={ghostBtnStyle()}>
-              load Metformin example
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 9.5,
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--color-ink-faint)',
+              fontWeight: 600,
+            }}
+          >
+            Presets
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" onClick={() => loadPreset(METFORMIN_PRESET)} style={ghostBtnStyle()}>
+              💊 Metformin
             </button>
-            <button type="button" onClick={reset} style={ghostBtnStyle()}>
-              clear
+            <button type="button" onClick={() => loadPreset(LOTR_PRESET)} style={ghostBtnStyle()}>
+              🧙 Middle-earth
             </button>
           </div>
+          <button type="button" onClick={reset} style={{ ...ghostBtnStyle(), flex: 'none', marginTop: 4 }}>
+            clear all
+          </button>
         </div>
 
         {/* Middle — list of triples */}
