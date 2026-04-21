@@ -1,7 +1,8 @@
-# Databricks App config — runs the built slide deck as a static site
-# served by a small Express process. DATABRICKS_APP_PORT is injected by
-# the Apps runtime at startup.
+# Databricks App config — runs the pre-built slide deck with a zero-dep
+# stdlib server. Databricks Apps cannot reach the internal npm proxy, so
+# all JS build + npm install happens on your laptop via
+# `./scripts/build-deploy.sh`. Only the built `dist/` + this server run
+# inside the App. DATABRICKS_APP_PORT is injected at startup.
 command:
-  - npm
-  - run
-  - start
+  - node
+  - server.mjs

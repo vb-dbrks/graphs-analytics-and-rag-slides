@@ -1,16 +1,25 @@
-# Databricks Asset Bundle — deploys the slide deck as a Databricks App.
+# Databricks Asset Bundle — deploys the pre-built slide deck as a
+# Databricks App. Databricks Apps cannot reach the internal npm proxy, so
+# we *never* run `npm install` inside the App runtime. Instead:
 #
-# Usage:
-#   databricks bundle validate -t dev
-#   databricks bundle deploy   -t dev
-#   databricks apps start graphs-analytics-and-rag-slides
+#   1. ./scripts/build-deploy.sh         (runs locally · builds dist/ · stages deploy/)
+#   2. databricks bundle deploy -t dev -p fieldeng
+#   3. databricks apps deploy graphs-rag-slides \
+#        --source-code-path <workspace-path>/deploy -p fieldeng
 #
-# The first deploy uploads the source to your workspace. The App runtime
-# then runs `npm install` (which triggers `postinstall` → `npm run build`
-# to produce dist/) and executes the command from app.yaml.
+# The app resource's source_code_path points at ./deploy, which contains
+# only the static bundle, a zero-dep stdlib server, and a minimal
+# package.json — so the Apps install step is a no-op.
 
 bundle:
   name: graphs-analytics-and-rag-slides
+
+# Force-sync the build output (it's gitignored). The app resource has
+# source_code_path: ./deploy, so only deploy/ contents become the app —
+# root-level sources are uploaded too but simply ignored by the App.
+sync:
+  include:
+    - deploy/**
 
 variables:
   app_name:
@@ -23,8 +32,8 @@ resources:
       name: ${var.app_name}
       description: >-
         Graphs, Graph RAG, and Databricks architecture — an opinionated
-        11-slide deck for RSAs and field engineering.
-      source_code_path: ./
+        interactive slide deck for RSAs and field engineering.
+      source_code_path: ./deploy
 
 targets:
   dev:
