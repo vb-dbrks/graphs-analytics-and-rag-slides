@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #07090c;
+  --color-bg-raised: #0e1218;
+  --color-bg-elev: #151a22;
+  --color-line: #1d232d;
+  --color-line-strong: #2a313d;
+  --color-ink: #f4f5f8;
+  --color-ink-dim: #9ba3b2;
+  --color-ink-faint: #596173;
+  --color-warm: #ff7a45;
+  --color-cool: #5ec8ff;
+  --color-grounded: #4fd1a5;
+  --color-danger: #ff5d6c;
+  --color-violet: #b39bff;
+
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  font-feature-settings: 'ss01', 'cv11';
+}
+
+body {
+  background:
+    radial-gradient(1400px 700px at 85% -10%, rgba(255, 122, 69, 0.06), transparent 55%),
+    radial-gradient(1000px 600px at -5% 110%, rgba(94, 200, 255, 0.05), transparent 60%),
+    var(--color-bg);
+}
+
+code, .mono { font-family: var(--font-mono); }
+
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide-safe {
+  padding: 4.5vh 5vw;
+}
+
+.glow-ring {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 10px 40px -15px rgba(0,0,0,0.6),
+    0 0 80px -30px rgba(94,200,255,0.18);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink-dim);
+  border: 1px solid var(--color-line);
+  background: rgba(255,255,255,0.01);
+}
+
+.pill-dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: currentColor;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 6px; }
+
+.card {
+  background: rgba(21,26,34,0.7);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.card-accent-warm { border-color: rgba(255,122,69,0.35); }
+.card-accent-cool { border-color: rgba(94,200,255,0.35); }
+.card-accent-good { border-color: rgba(79,209,165,0.35); }
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-ink-dim);
+  background: var(--color-bg-raised);
+}
+
+.grad-warm {
+  background: linear-gradient(135deg, rgba(255,122,69,0.2), rgba(255,122,69,0.02));
+}
+.grad-cool {
+  background: linear-gradient(135deg, rgba(94,200,255,0.2), rgba(94,200,255,0.02));
+}
+.grad-good {
+  background: linear-gradient(135deg, rgba(79,209,165,0.2), rgba(79,209,165,0.02));
+}
+
+.slide-heading {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.presenter-notes {
+  color: var(--color-ink-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.presenter-notes li {
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed var(--color-line);
+}
+.presenter-notes li:last-child { border-bottom: none; }
+
+/* Cytoscape container should fill its parent with zero intrinsic size. */
+.cy-host {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe { transition: none !important; animation: none !important; }
+}
