@@ -14,8 +14,8 @@ bundle:
 
 variables:
   app_name:
-    description: Databricks App name.
-    default: graphs-analytics-and-rag-slides
+    description: Databricks App name (must be 2–30 chars).
+    default: graphs-rag-slides
 
 resources:
   apps:
