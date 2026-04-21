@@ -1,0 +1,39 @@
+# Databricks Asset Bundle — deploys the slide deck as a Databricks App.
+#
+# Usage:
+#   databricks bundle validate -t dev
+#   databricks bundle deploy   -t dev
+#   databricks apps start graphs-analytics-and-rag-slides
+#
+# The first deploy uploads the source to your workspace. The App runtime
+# then runs `npm install` (which triggers `postinstall` → `npm run build`
+# to produce dist/) and executes the command from app.yaml.
+
+bundle:
+  name: graphs-analytics-and-rag-slides
+
+variables:
+  app_name:
+    description: Databricks App name.
+    default: graphs-analytics-and-rag-slides
+
+resources:
+  apps:
+    slides:
+      name: ${var.app_name}
+      description: >-
+        Graphs, Graph RAG, and Databricks architecture — an opinionated
+        11-slide deck for RSAs and field engineering.
+      source_code_path: ./
+
+targets:
+  dev:
+    mode: development
+    default: true
+
+  prod:
+    mode: production
+    resources:
+      apps:
+        slides:
+          name: ${var.app_name}

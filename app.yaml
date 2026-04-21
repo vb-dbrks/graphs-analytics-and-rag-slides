@@ -1,0 +1,7 @@
+# Databricks App config — runs the built slide deck as a static site
+# served by a small Express process. DATABRICKS_APP_PORT is injected by
+# the Apps runtime at startup.
+command:
+  - npm
+  - run
+  - start

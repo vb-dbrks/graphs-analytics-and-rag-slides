@@ -4,12 +4,15 @@ import { Slide1bDikw } from './Slide1bDikw';
 import { Slide2Scenario } from './Slide2Scenario';
 import { Slide2aSqlPain } from './Slide2aSqlPain';
 import { Slide2bRdfVsLpg } from './Slide2bRdfVsLpg';
+import { Slide5aRdfPlayground } from './Slide5aRdfPlayground';
+import { Slide5bLpgPlayground } from './Slide5bLpgPlayground';
 import { Slide3DecisionMap } from './Slide3DecisionMap';
 import { Slide4WorksVsDoesnt } from './Slide4WorksVsDoesnt';
 import { Slide5RealityAtScale } from './Slide5RealityAtScale';
 import { Slide6RagVsGraphRag } from './Slide6RagVsGraphRag';
 import { Slide7DatabricksLens } from './Slide7DatabricksLens';
 import { Slide8DecisionFramework } from './Slide8DecisionFramework';
+import { Slide11Playground } from './Slide11Playground';
 
 export type SlideConfig = {
   id: string;
@@ -31,7 +34,6 @@ export const slides: SlideConfig[] = [
       'Opening line: graph-shaped domains do not automatically justify graph databases.',
       'Show the connected life-sci graph self-organise — make it feel alive before we question it.',
       'End with the retrieval path lit up: the payoff is always a grounded answer.',
-      'Audience take-away so far: interesting visual, but we have not argued for anything yet.',
     ],
     Component: Slide1Hook,
   },
@@ -41,12 +43,11 @@ export const slides: SlideConfig[] = [
     title: 'From data to wisdom.',
     subtitle: 'Different layers of meaning demand different shapes of data.',
     speakerNotes: [
-      'Classic DIKW hierarchy — with "Insight" as the step between Knowledge and Wisdom.',
+      'Classic DIKW hierarchy with Insight between Knowledge and Wisdom.',
       'Data → Information: aggregation and context. SQL and the lakehouse do this well.',
       'Knowledge = connected entities. This is where modelling choice starts to matter.',
-      'Insight = patterns ACROSS knowledge — multi-hop reasoning. Graphs shine here.',
-      'Wisdom = applied judgement. The domain knowledge you still have to encode somewhere.',
-      'Frame the rest of the talk as: where in this hierarchy are you trying to reach?',
+      'Insight = patterns across knowledge. Graphs shine here.',
+      'Wisdom = applied judgement.',
     ],
     Component: Slide1bDikw,
   },
@@ -71,10 +72,9 @@ export const slides: SlideConfig[] = [
     subtitle:
       'Two real questions a graph-shaped domain forces on you — one fixed-depth, one hierarchical.',
     speakerNotes: [
-      'Fixed-depth: walk the chain drug → target → pathway → disease → trial → evidence. 9 JOINs, 5 link tables.',
+      'Fixed-depth: walk drug → target → pathway → disease → trial → evidence. 9 JOINs, 5 link tables.',
       'Unknown-depth: WITH RECURSIVE for drug-drug interaction via shared biology. Requires DBR 17+.',
-      'Cypher collapses both shapes into one pattern — the hop bound lives in the pattern, not in a WHERE.',
-      'Two messages: every hop is another JOIN; every new relation type breaks every query that touches it.',
+      'Cypher collapses both shapes — the hop bound lives in the pattern, not in a WHERE clause.',
     ],
     Component: Slide2aSqlPain,
   },
@@ -84,72 +84,93 @@ export const slides: SlideConfig[] = [
     title: 'Two ways to be a graph.',
     subtitle: 'RDF is about meaning. LPG is about traversal.',
     speakerNotes: [
-      'Show where properties live: RDF uses separate triples; LPG inlines them on the node.',
-      'Query shape: SPARQL is set-theoretic pattern matching; Cypher reads like ASCII-art of the path.',
-      'In-the-wild anchors: SNOMED / Wikidata (RDF); Neo4j / Neptune / most Graph RAG stacks (LPG).',
-      'If unsure which you need, start with LPG — the rest of this talk assumes it.',
+      'Show where properties live: RDF uses separate triples; LPG inlines them.',
+      'Query shape: SPARQL is set-theoretic; Cypher reads like ASCII-art of the path.',
+      'In-the-wild: SNOMED / Wikidata (RDF); Neo4j / Neptune / Graph RAG stacks (LPG).',
     ],
     Component: Slide2bRdfVsLpg,
   },
   {
+    id: 's5a',
+    kicker: '06 · build an rdf graph',
+    title: 'Build an RDF graph.',
+    subtitle: 'Every triple adds two nodes and one labelled edge. Predicates are first-class.',
+    speakerNotes: [
+      'Live demo — add a triple, watch the graph grow.',
+      'Stress: every property is its own triple. "Metformin launched 1995" is a separate edge.',
+      'Load the preset and talk about: predicates carry the meaning; identity is the URI.',
+    ],
+    Component: Slide5aRdfPlayground,
+  },
+  {
+    id: 's5b',
+    kicker: '07 · build an lpg graph',
+    title: 'Build an LPG graph.',
+    subtitle: 'Nodes carry their own properties. Edges are typed and directional.',
+    speakerNotes: [
+      'Same domain, different shape — properties live on the node, not as separate edges.',
+      'Hover a node to reveal its property object — this is what Cypher MATCH patterns bind to.',
+      'Land the payoff: most Graph RAG stacks (Neo4j, Neptune) use LPG for exactly this ergonomics.',
+    ],
+    Component: Slide5bLpgPlayground,
+  },
+  {
     id: 's3',
-    kicker: '06 · decision map',
+    kicker: '08 · decision map',
     title: 'When does a graph actually make sense?',
     subtitle: 'Choose based on workload shape, not domain shape.',
     speakerNotes: [
       'Two axes: relationship complexity × scale / distributed analytics.',
       'Reporting and customer 360 show up in Lakehouse SQL despite being graph-shaped.',
-      'Drug-target-pathway reasoning and fraud rings sit firmly in native-graph or hybrid.',
-      'Stress: this slide is opinionated — move workloads around as you see fit.',
+      'Drug-target-pathway and fraud rings sit in native-graph or hybrid.',
     ],
     Component: Slide3DecisionMap,
   },
   {
     id: 's4',
-    kicker: '07 · what works, what doesn’t',
+    kicker: '09 · what works, what doesn’t',
     title: 'What works. What doesn’t. What’s hybrid.',
     subtitle: 'Graph-friendly workloads are narrower than they feel.',
     speakerNotes: [
-      'Three lanes. Cards drift in and sort.',
-      'Borderline cases land in hybrid — use this to talk about Graph RAG as a pragmatic middle.',
-      'Don’t skip the “better elsewhere” lane — that’s where we save teams from themselves.',
+      'Three lanes: graph-friendly, hybrid, better elsewhere.',
+      'Borderline cases land in hybrid — Graph RAG as the pragmatic middle.',
+      'Don’t skip the "better elsewhere" lane — that’s where we save teams from themselves.',
     ],
     Component: Slide4WorksVsDoesnt,
   },
   {
     id: 's5',
-    kicker: '08 · reality at scale',
+    kicker: '10 · reality at scale',
     title: 'Reality at scale',
     subtitle: 'The graph is rarely the source of truth.',
     speakerNotes: [
       'Walk the pipeline: sources → medallion → enrichment → optional graph projection → serving.',
-      'Hit each warning callout: duplication, sync lag, modelling overhead, extra infra, language fragmentation.',
+      'Hit each warning callout: duplication, sync lag, modelling overhead, extra infra, language split.',
       'Frame the graph service as a serving-layer branch, not a replacement.',
     ],
     Component: Slide5RealityAtScale,
   },
   {
     id: 's6',
-    kicker: '09 · rag vs graph rag',
+    kicker: '11 · rag vs graph rag',
     title: 'Traditional RAG vs Graph RAG',
     subtitle:
       'Could this therapy combination create an indirect risk in this pathway context?',
     speakerNotes: [
       'Same question, two retrieval styles.',
       'Left: similarity pulls chunks. Useful, but flat.',
-      'Right: entity extraction → multi-hop path → supporting docs. The relationships become the answer scaffold.',
-      'Graph RAG wins when connected entities matter more than chunk similarity.',
+      'Right: entity extraction → multi-hop path → supporting docs. The relationships become the scaffold.',
     ],
     Component: Slide6RagVsGraphRag,
   },
   {
     id: 's7',
-    kicker: '10 · databricks lens',
+    kicker: '12 · databricks lens',
     title: 'How this fits in a Databricks architecture',
     subtitle:
       'Lakehouse for scale and preparation. Graph for specialised relationship-heavy serving.',
     speakerNotes: [
-      'Build bottom-up: ingestion, Delta, medallion, extraction, embeddings, governance.',
+      'Stack bottom-up: ingestion, Delta, medallion, extraction, embeddings, governance.',
       'Graph projection is a branch off Gold/Silver curated entities — not a replacement.',
       'Agents and apps consume vector, graph, or both. Policy & lineage live in UC regardless.',
     ],
@@ -157,14 +178,27 @@ export const slides: SlideConfig[] = [
   },
   {
     id: 's8',
-    kicker: '11 · decision framework',
+    kicker: '13 · decision framework',
     title: 'A simple decision framework',
     subtitle: 'Graphs matter. Graph databases are specialised.',
     speakerNotes: [
       'Three questions, four terminal recommendations.',
-      'Hybrid Graph RAG is usually the right starting point — highlight it before returning to equal emphasis.',
+      'Hybrid Graph RAG is usually the right starting point.',
       'Close: graphs are everywhere, graph databases shouldn’t be.',
     ],
     Component: Slide8DecisionFramework,
+  },
+  {
+    id: 's11',
+    kicker: '14 · try it yourself',
+    title: 'Graph RAG is just pathfinding.',
+    subtitle: 'Pick any two nodes. Watch the assistant walk the path.',
+    speakerNotes: [
+      'End-of-deck playground. Live demo.',
+      'Run "question → answer" preset for the classic Graph-RAG traversal.',
+      'Run "Metformin → T2D" to show the mechanism chain (drug → target → pathway → disease).',
+      'If a path doesn’t exist, that’s useful signal too — the graph tells you honestly what it can’t answer.',
+    ],
+    Component: Slide11Playground,
   },
 ];
